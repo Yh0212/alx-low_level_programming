@@ -29,7 +29,11 @@ int str_isTrue(char *s1, char *s2, int i, int j)
  *
  * Return: 1 if are considered identical.
  */
-int wildcmp(char *s1, char *s2)
-{
+
+ int wildcmp(char *s1, char *s2)
+ {  
 	return (str_isTrue(s1, s2, 0, 0));
-}
+
+ }
+
+
