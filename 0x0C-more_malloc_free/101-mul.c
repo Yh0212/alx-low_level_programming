@@ -1,31 +1,94 @@
 #include "main.h"
+#include <stdlib.h>
+#include <stdio.h>
+#define ERR_MSG "Error"
+/**
+ * is_digit - checks if the string contains a non-digit char
+ * @s: string to be evaluated
+ *
+ * Return: 0 if a non-digit is found, 1 otherwise
+ */
+int is_digit(char *s)
+{
+	int x = 0;
 
+	while (s[x])
+	{
+		if (s[x] < '0' || s[x] > '9')
+			return (0);
+		x++;
+	}
+	return (1);
+}
+/**
+ * _strlen - returns the length of a string
+ * @s: string to evaluate
+ * Return: the length of the string
+ */
+int _strlen(char *s)
+{
+	int a = 0;
+
+	while (s[a] != '\0')
+	{
+		a++;
+	}
+	return (a);
+}
+/**
+ * errors - handles an  errors for main
+ */
+void errors(void)
+{
+	printf("Error\n");
+	exit(98);
+}
 /**
  * main - multiplies two positive numbers
- * @argc: n arguments
- * @argv: args
- * Return: int
+ * @argc: number of arguments
+ * @argv: array of arguments
+ * Return: always 0 (Success)
  */
 int main(int argc, char *argv[])
 {
-unsigned long mul;
-int i, j;
-	if (argc != 3)
-	{ printf("Error\n");
-	exit(98); }
-	for (i = 1; i < argc; i++)
+	char *s1, *s2;
+	int len1, len2, len, i, carry, digit1, digit2, *res, x = 0;
+
+	s1 = argv[1], s2 = argv[2];
+	if (argc != 3 || !is_digit(s1) || !is_digit(s2))
+		errors();
+	len1 = _strlen(s1);
+	len2 = _strlen(s2);
+	len = len1 + len2 + 1;
+	res = malloc(sizeof(int) * len);
+	if (!res)
+		return (1);
+	for (i = 0; i <= len1 + len2; i++)
+		res[i] = 0;
+	for (len1 = len1 - 1; len1 >= 0; len1--)
 	{
-		for (j = 0; argv[i][j] != '\0'; j++)
+		digit1 = s1[len1] - '0';
+		carry = 0;
+		for (len2 = _strlen(s2) - 1; len2 >= 0; len2--)
 		{
-			if (argv[i][j] > 57 || argv[i][j] < 48)
-			{  printf("Error\n");
-			exit(98); }
+			digit2 = s2[len2] - '0';
+			carry += res[len1 + len2 + 1] + (digit1 * digit2);
+			res[len1 + len2 + 1] = carry % 10;
+			carry /= 10;
 		}
-
+		if (carry > 0)
+			res[len1 + len2 + 1] += carry;
 	}
-	mul = atol(argv[1]) *  atol(argv[2]);
-	printf("%lu\n", mul);
-return (0);
+	for (i = 0; i < len - 1; i++)
+	{
+		if (res[i])
+			x = 1;
+		if (x)
+			_putchar(res[i] + '0');
+	}
+	if (!x)
+		_putchar('0');
+	_putchar('\n');
+	free(res);
+	return (0);
 }
-
-
